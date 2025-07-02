@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 interface Evento{
   nombreEven : string,
   fecha : string,
@@ -35,6 +37,8 @@ const initialStateProyecto:Proyecto = {
   objetivo : "",
   personaAcargo : ""
 }
+function Sistema(){
+const [Evento, setEvento] = useState(initialStateEvento)
 
 const handleRegistrar = ()=>{
   alert("Falta")
@@ -69,4 +73,5 @@ return (
         onClick={()=>{handleEliminar()}}>Eliminar</button>
     </form>
 
-)
+  )
+}
