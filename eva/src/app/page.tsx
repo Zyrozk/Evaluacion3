@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
@@ -23,39 +24,29 @@ const initialStateProyecto:Proyecto = {
 }
 function Sistema(){
 const [Evento, setEvento] = useState(initialStateEvento)
+const [Beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
+const [Proyecto, setProyecto] = useState(initialStateProyecto)
 
-const handleRegistrar = ()=>{
-  alert("Falta")
+const handleEvento = ()=>{
+  alert("Acaba de entrar a evento")
 }
 
-const handleActualizar = ()=>{
-  alert("Falta")
+const handleBeneficiario = ()=>{
+  alert("Acaba de entrar a Beneficiarios")
 }
 
-const handleEliminar = ()=>{
-  alert("Falta")
+const handleProyecto = ()=>{
+  alert("Acaba de entrar a Proyecto")
 }
 
 
 
 return (
-    <form>
-      <h1>Eventos</h1>
-      <label>Nombre</label><br/>
-      <input
-          name = "nombre"
-          type = "text"
-          placeholder = "Ingrese su nombre"></input>
-
-
-      <span></span>
-      <button
-        onclick={()=>{handleRegistrar()}}>Registrar</button>
-      <button
-        onclick={()=>{handleActualizar()}}>Actualizar</button>
-      <button
-        onClick={()=>{handleEliminar()}}>Eliminar</button>
-    </form>
-
-  )
+  <form>
+    <h1>Bienvenido</h1>
+    <button onClick={handleEvento}>Eventos</button>
+    <button onClick={handleBeneficiario}>Beneficiarios</button>
+    <button onClick={handleProyecto}>Proyectos</button>
+  </form>
+)
 }
