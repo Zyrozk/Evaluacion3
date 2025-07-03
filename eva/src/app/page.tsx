@@ -1,23 +1,7 @@
 import { useState } from "react"
-
-interface Evento{
-  nombreEven : string,
-  fecha : string,
-  direccion : string  
-}
-
-interface Beneficiario{
-  nombre : string,
-  apellido : string,
-  telefono : number,
-  rol : string
-}
-
-interface Proyecto{
-  nombreProye : string,
-  objetivo : string,
-  personaAcargo : string
-}
+import { Evento } from "./interfaces/iEvento"
+import { Beneficiario } from "./interfaces/iBeneficiario"
+import { Proyecto } from "./interfaces/iProyecto"
 
 const initialStateEvento:Evento = {
   nombreEven : "",
