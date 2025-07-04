@@ -22,10 +22,20 @@ const initialStateProyecto:Proyecto = {
   objetivo : "",
   personaAcargo : ""
 }
-function Sistema(){
-const [Evento, setEvento] = useState(initialStateEvento)
-const [Beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
-const [Proyecto, setProyecto] = useState(initialStateProyecto)
+export default function Home(){
+const [evento, setEvento] = useState(initialStateEvento)
+const [eventos, setEventos] = useState<Evento[]>([])
+const [EventoIndex, setEventoIndex] = useState<number | null>(null)
+
+
+const [beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
+const [beneficiarios, setBeneficiarios] = useState<Beneficiario[]>([])
+const [BeneficiarioIndex, setBeneficiarioIndex] = useState<number | null>(null)
+
+
+const [proyecto, setProyecto] = useState(initialStateProyecto)
+const [proyectos, setProyectos] = useState<Proyecto[]>([])
+const [ProyectoIndex, setProyectoIndex] = useState<number | null>(null)
 
 const handleEvento = ()=>{
   alert("Acaba de entrar a evento")
