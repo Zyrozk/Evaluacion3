@@ -8,13 +8,14 @@ export const RegistroEvento = () => {
         useEffect(() => {
             let lisEvento = localStorage.getItem("eventos")
             if(lisEvento != null){
-                let listado = JSON.parse(lisEvento)
-                setEventos(listado)
+                let listadoE = JSON.parse(lisEvento)
+                setEventos(listadoE)
             }
 
         },[])
   return (
     <>
+        <h1>EVENTOS</h1>
         <table>
             <thead>
                 <tr>
