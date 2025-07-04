@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
+import RegistroEvento from "./componentes/RegistroEvento"
 
 const initialStateEvento:Evento = {
   nombreEven : "",
@@ -72,19 +73,17 @@ const handleProyecto = ()=>{
 return (
   <form>
     <h1>Bienvenido</h1>
-    <label>Nombre de evento</label><br/>
+    <RegistroEvento></RegistroEvento>
     <input
         name="nombreEven"
         type="text"
         placeholder="Ingrese el nombre del evento"
         onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-      <label>Fecha</label><br/>
     <input
         name="fecha"
         type="text"
         placeholder="Ingrese la fecha"
         onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <label>Dirección</label><br/>
     <input
         name="dirección"
         type="text"

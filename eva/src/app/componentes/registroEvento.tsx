@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Evento } from '../interfaces/iEvento'
+import '../styles/page.css'
 
 export const RegistroEvento = () => {
     const miStorage = window.localStorage
@@ -11,7 +12,7 @@ export const RegistroEvento = () => {
                 setEventos(listado)
             }
 
-        })
+        },[])
   return (
     <>
         <table>
@@ -20,10 +21,13 @@ export const RegistroEvento = () => {
                     <th>Nombre del evento</th>
                     <th>Fecha</th>
                     <th>Dirección</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
         </table>
     </>
   )
 }
+
+export default RegistroEvento
 
