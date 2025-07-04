@@ -46,14 +46,15 @@ useEffect(() =>{
     let listado = JSON.parse(lisEvento)
     setEventos(listado)
   }
-})
-
+},[])
 
 const handleRegistrarEvento = ()=>{
-  const lista = [...eventos,evento]
-  setEventos(lista)
-  setEvento(initialStateEvento)
-  alert("Ingreso un nuevo evento")
+  miStorage.setItem("eventos",JSON.stringify([...eventos, evento]))
+  }
+  const handleEvento = (name:string, value:string)=>{
+    setEvento(
+      {...evento, [name] : value }
+    )
   }
   
 
@@ -71,6 +72,26 @@ const handleProyecto = ()=>{
 return (
   <form>
     <h1>Bienvenido</h1>
+    <label>Nombre de evento</label><br/>
+    <input
+        name="nombreEven"
+        type="text"
+        placeholder="Ingrese el nombre del evento"
+        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <label>Fecha</label><br/>
+    <input
+        name="fecha"
+        type="text"
+        placeholder="Ingrese la fecha"
+        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+    <label>Dirección</label><br/>
+    <input
+        name="dirección"
+        type="text"
+        placeholder="Ingrese dirección"
+        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+    <button
+      onClick={()=>{handleRegistrarEvento()}}>Registrar</button>    
   </form>
 )
 }
