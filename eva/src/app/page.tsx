@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
@@ -22,7 +22,10 @@ const initialStateProyecto:Proyecto = {
   objetivo : "",
   personaAcargo : ""
 }
+
 export default function Home(){
+
+const miStorage = window.localStorage
 const [evento, setEvento] = useState(initialStateEvento)
 const [eventos, setEventos] = useState<Evento[]>([])
 const [EventoIndex, setEventoIndex] = useState<number | null>(null)
@@ -37,9 +40,23 @@ const [proyecto, setProyecto] = useState(initialStateProyecto)
 const [proyectos, setProyectos] = useState<Proyecto[]>([])
 const [ProyectoIndex, setProyectoIndex] = useState<number | null>(null)
 
-const handleEvento = ()=>{
-  alert("Acaba de entrar a evento")
-}
+useEffect(() =>{
+  let lisEvento = localStorage.getItem("eventos")
+  if(lisEvento != null){
+    let listado = JSON.parse(lisEvento)
+    setEventos(listado)
+  }
+})
+
+
+const handleRegistrarEvento = ()=>{
+  const lista = [...eventos,evento]
+  setEventos(lista)
+  setEvento(initialStateEvento)
+  alert("Ingreso un nuevo evento")
+  }
+  
+
 
 const handleBeneficiario = ()=>{
   alert("Acaba de entrar a Beneficiarios")
@@ -54,9 +71,6 @@ const handleProyecto = ()=>{
 return (
   <form>
     <h1>Bienvenido</h1>
-    <button onClick={handleEvento}>Eventos</button>
-    <button onClick={handleBeneficiario}>Beneficiarios</button>
-    <button onClick={handleProyecto}>Proyectos</button>
   </form>
 )
 }
