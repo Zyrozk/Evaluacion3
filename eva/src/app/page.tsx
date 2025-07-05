@@ -4,8 +4,8 @@ import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
 import RegistroEvento from "./componentes/RegistroEvento"
-import RegistroBeneficiario from "./componentes/registroBeneficiario"
-import { RegistroProyecto } from "./componentes/registroProyecto"
+import RegistroBeneficiario from "./componentes/RegistroBeneficiario"
+import { RegistroProyecto } from "./componentes/RegistroProyecto"
 
 const initialStateEvento:Evento = {
   nombreEven : "",
@@ -55,17 +55,17 @@ useEffect(() =>{
   let lisBeneficiario = localStorage.getItem("beneficiarios")
   if(lisBeneficiario != null){
     let listadoB =  JSON.parse(lisBeneficiario)
-    setBeneficiario(listadoB)
+    setBeneficiarios(listadoB)
   }
-})
+},[])
 
 useEffect(() =>{
   let lisProyecto = localStorage.getItem("proyectos")
   if(lisProyecto != null){
     let listadoP = JSON.parse(lisProyecto)
-    setProyecto(listadoP)
+    setProyectos(listadoP)
   }
-})
+},[])
 
 const handleRegistrarEvento = ()=>{
   miStorage.setItem("eventos",JSON.stringify([...eventos, evento]))
@@ -151,7 +151,7 @@ return (
         placeholder="Ingrese el nombre del proyecto"
         onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
     <input
-        name="obejtivo"
+        name="objetivo"
         type="text"
         placeholder="Ingrese objetivo"
         onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
@@ -161,7 +161,7 @@ return (
         placeholder="Ingrese nombre de encargado"
         onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
     <button
-      onClick={()=>{handleRegistrarBeneficiario()}}>Registrar</button> 
+      onClick={()=>{handleRegistrarProyecto()}}>Registrar</button> 
   </form>
   
   </> 
