@@ -140,6 +140,31 @@ const actualizarProyecto = (index: number) =>{
   setProyectoIndex(index)
 }
 
+const eliminarEvento = (index: number) => {
+  if (confirm("aadsad")) {
+    const listaE = eventos.filter((_, i) => i !== index)
+    setEventos(listaE)
+    miStorage.setItem("eventos", JSON.stringify(listaE))
+  }
+}
+
+const eliminarBeneficiario = (index: number) => {
+  if (confirm("asd")) {
+    const listaB = beneficiarios.filter((_, i) => i !== index)
+    setBeneficiarios(listaB)
+    miStorage.setItem("beneficiarios", JSON.stringify(listaB))
+  }
+}
+
+const eliminarProyecto = (index: number) => {
+  if (confirm("adds")) {
+    const listaP = proyectos.filter((_, i) => i !== index)
+    setProyectos(listaP)
+    miStorage.setItem("proyectos", JSON.stringify(listaP))
+  }
+}
+
+
 return (
   <>
   <section>
@@ -247,6 +272,7 @@ return (
         <li key={i}>
           {e.nombreEven} - {e.fecha} - {e.direccion}
           <button onClick={() => actualizarEvento(i)}>Actualizar</button>
+          <button onClick={() => eliminarEvento(i)}>Eliminar</button>
         </li>
       ))}
     </ul>
@@ -257,6 +283,7 @@ return (
         <li key={i}>
           {e.nombre} - {e.apellido} - {e.telefono} - {e.rol}
           <button onClick={() => actualizarBeneficiario(i)}>Actualizar</button>
+          <button onClick={() => eliminarBeneficiario(i)}>Eliminar</button>
         </li>
       ))}
     </ul>
@@ -267,6 +294,7 @@ return (
         <li key={i}>
           {e.nombreProye} - {e.objetivo} - {e.personaAcargo}
           <button onClick={() => actualizarProyecto(i)}>Actualizar</button>
+          <button onClick={() => eliminarProyecto(i)}>Eliminar</button>
         </li>
       ))}
     </ul>
