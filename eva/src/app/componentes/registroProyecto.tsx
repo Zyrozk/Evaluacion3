@@ -6,7 +6,7 @@ export const RegistroProyecto = () => {
     const miStorage = window.localStorage
     const [Proyectos, setProyectos] = useState<Proyecto[]>([])
         useEffect(() => {
-            let lisProyecto = localStorage.getItem("proyectos")
+            let lisProyecto = miStorage.getItem("proyectos")
             if(lisProyecto != null){
                 let listadoP = JSON.parse(lisProyecto)
                 setProyectos(listadoP)

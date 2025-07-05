@@ -43,8 +43,9 @@ const [proyecto, setProyecto] = useState(initialStateProyecto)
 const [proyectos, setProyectos] = useState<Proyecto[]>([])
 const [ProyectoIndex, setProyectoIndex] = useState<number | null>(null)
 
+
 useEffect(() =>{
-  let lisEvento = localStorage.getItem("eventos")
+  let lisEvento = miStorage.getItem("eventos")
   if(lisEvento != null){
     let listadoE = JSON.parse(lisEvento)
     setEventos(listadoE)
@@ -95,75 +96,86 @@ const handleRegistrarProyecto = ()=>{
     )
   }
 
+const actualizarEvento = (index: number) =>{
+  setEvento(eventos[index])
+  setEventoIndex(index)
+}
+
+const traerEvento = (e:Evento) =>{
+  setEvento(e)
+}
+
 return (
   <>
-  <form>
-    <h1>Bienvenido</h1>
-    <RegistroEvento></RegistroEvento>
-    <input
-        name="nombreEven"
-        type="text"
-        placeholder="Ingrese el nombre del evento"
-        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="fecha"
-        type="text"
-        placeholder="Ingrese la fecha"
-        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="dirección"
-        type="text"
-        placeholder="Ingrese dirección"
-        onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <button
-      onClick={()=>{handleRegistrarEvento()}}>Registrar</button>    
-  </form>
-  <form>
-    <RegistroBeneficiario></RegistroBeneficiario>
-    <input
-        name="nombre"
-        type="text"
-        placeholder="Ingrese su nombre"
-        onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="apellido"
-        type="text"
-        placeholder="Ingrese su apellido"
-        onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="telefono"
-        type="text"
-        placeholder="Ingrese su teléfono"
-        onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="rol"
-        type="text"
-        placeholder="Ingrese su rol"
-        onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <button
-      onClick={()=>{handleRegistrarBeneficiario()}}>Registrar</button> 
-  </form>
-  <form>
-    <RegistroProyecto></RegistroProyecto>
-    <input
-        name="nombre de proyecto"
-        type="text"
-        placeholder="Ingrese el nombre del proyecto"
-        onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="objetivo"
-        type="text"
-        placeholder="Ingrese objetivo"
-        onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <input
-        name="persona a cargo"
-        type="text"
-        placeholder="Ingrese nombre de encargado"
-        onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-    <button
-      onClick={()=>{handleRegistrarProyecto()}}>Registrar</button> 
-  </form>
-  
+  <section>
+    <form>
+      <h1>Bienvenido</h1>
+     <RegistroEvento></RegistroEvento>
+      <input
+          name="nombreEven"
+          type="text"
+          placeholder="Ingrese el nombre del evento"
+          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="fecha"
+          type="text"
+          placeholder="Ingrese la fecha"
+          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="direccion"
+          type="text"
+          placeholder="Ingrese direccion"
+          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <button
+        onClick={()=>{handleRegistrarEvento()}}>Registrar</button>
+    </form>
+    <form>
+      <RegistroBeneficiario></RegistroBeneficiario>
+      <input
+          name="nombre"
+          type="text"
+          placeholder="Ingrese su nombre"
+          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="apellido"
+         type="text"
+          placeholder="Ingrese su apellido"
+          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+     <input
+         name="telefono"
+          type="text"
+          placeholder="Ingrese su teléfono"
+          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="rol"
+          type="text"
+          placeholder="Ingrese su rol"
+          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <button
+        onClick={()=>{handleRegistrarBeneficiario()}}>Registrar</button> 
+    </form>
+    <form>
+      <RegistroProyecto></RegistroProyecto>
+      <input
+          name="nombre de proyecto"
+          type="text"
+          placeholder="Ingrese el nombre del proyecto"
+          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="objetivo"
+          type="text"
+          placeholder="Ingrese objetivo"
+          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <input
+          name="persona a cargo"
+          type="text"
+          placeholder="Ingrese nombre de encargado"
+          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+      <button
+        onClick={()=>{handleRegistrarProyecto()}}>Registrar</button> 
+    </form>
+  </section>
   </> 
 )
 }
+

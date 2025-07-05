@@ -6,7 +6,7 @@ export const RegistroBeneficiario = () => {
     const miStorage = window.localStorage
     const [beneficiarios, setBeneficiarios] = useState<Beneficiario[]>([])
         useEffect(() => {
-            let lisBeneficiario = localStorage.getItem("beneficiarios")
+            let lisBeneficiario = miStorage.getItem("beneficiarios")
             if(lisBeneficiario != null){
                 let listadoB = JSON.parse(lisBeneficiario)
                 setBeneficiarios(listadoB)
