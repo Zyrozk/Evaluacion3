@@ -76,10 +76,10 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectEle
 const handleRegistrarEvento = ()=>{
   if (EventoIndex !== null) {
     if (confirm("agrega texto despues")) {
-      const actualizaR = [...eventos]
-      actualizaR[EventoIndex] = evento
-      setEventos(actualizaR)
-      miStorage.setItem("eventos",JSON.stringify(actualizaR))
+      const actualizarE = [...eventos]
+      actualizarE[EventoIndex] = evento
+      setEventos(actualizarE)
+      miStorage.setItem("eventos",JSON.stringify(actualizarE))
       setEventoIndex(null)
       setEvento(initialStateEvento)
   }
@@ -92,30 +92,53 @@ const handleRegistrarEvento = ()=>{
 
   
 const handleRegistrarBeneficiario = ()=>{
-  miStorage.setItem("beneficiarios",JSON.stringify([...beneficiarios,beneficiario]))
+  if (BeneficiarioIndex !== null) {
+    if (confirm("asd")) {
+      const actualizarB = [...beneficiarios]
+      actualizarB[BeneficiarioIndex] = beneficiario
+      setBeneficiarios(actualizarB)
+      miStorage.setItem("beneficiarios",JSON.stringify(actualizarB))
+      setBeneficiarioIndex(null)
+      setBeneficiario(initialStateBeneficiario)
   }
-  const handleBeneficiario = (name:string, value:string)=>{
-    setBeneficiario(
-      {...beneficiario, [name] : value}
-    )
-  }
-
+} else {
+  const listaB = [...beneficiarios, beneficiario]
+  setBeneficiarios(listaB)
+  miStorage.setItem("beneficiarios", JSON.stringify(listaB))
+ }
+}
 
 const handleRegistrarProyecto = ()=>{
-  miStorage.setItem("proyectos",JSON.stringify([...proyectos, proyecto]))
+  if (ProyectoIndex !== null) {
+    if (confirm("asad")) {
+      const actualizarP = [...proyectos]
+      actualizarP[ProyectoIndex] = proyecto
+      setProyectos(actualizarP)
+      miStorage.setItem("proyectos",JSON.stringify(actualizarP))
+      setProyectoIndex(null)
+      setProyecto(initialStateProyecto)
   }
-  const handleProyecto = (name:string, value:string)=>{
-    setProyecto(
-      {...proyecto, [name] : value}
-    )
+} else {
+  const listaP = [...proyectos, proyecto]
+  setProyectos(listaP)
+  miStorage.setItem("proyectos", JSON.stringify(listaP))
   }
+}  
 
 const actualizarEvento = (index: number) =>{
   setEvento(eventos[index])
   setEventoIndex(index)
 }
 
+const actualizarBeneficiario = (index: number) =>{
+  setBeneficiario(beneficiarios[index])
+  setBeneficiarioIndex(index)
+}
 
+const actualizarProyecto = (index: number) =>{
+  setProyecto(proyectos[index])
+  setProyectoIndex(index)
+}
 
 return (
   <>
@@ -152,48 +175,69 @@ return (
     </form>
     <form>
       <RegistroBeneficiario></RegistroBeneficiario>
+      <>
       <input
           name="nombre"
           type="text"
           placeholder="Ingrese su nombre"
-          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={beneficiario.nombre}
+          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+      </>
+      <>
       <input
           name="apellido"
          type="text"
           placeholder="Ingrese su apellido"
-          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={beneficiario.apellido}
+          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+      </>
+      <>
      <input
          name="telefono"
           type="text"
           placeholder="Ingrese su teléfono"
-          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={beneficiario.telefono}
+          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+      </>
+      <>
       <input
           name="rol"
           type="text"
           placeholder="Ingrese su rol"
-          onChange={(e)=>{handleBeneficiario(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={beneficiario.rol}
+          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+      </>
       <button
-        onClick={()=>{handleRegistrarBeneficiario()}}>Registrar</button> 
+        onClick={(handleRegistrarBeneficiario)}>{BeneficiarioIndex !== null ? "Actualizar Beneficiario" : "Registrar Beneficiario"}</button> 
     </form>
     <form>
       <RegistroProyecto></RegistroProyecto>
+      <>
       <input
-          name="nombre de proyecto"
+          name="nombreProye"
           type="text"
           placeholder="Ingrese el nombre del proyecto"
-          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={proyecto.nombreProye}
+          onChange={(e) => {handleInputChange(e, setProyecto, proyecto)}}/><br/>
+      </>
+      <>
       <input
           name="objetivo"
           type="text"
           placeholder="Ingrese objetivo"
-          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={proyecto.objetivo}
+          onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
+      </>
+      <>
       <input
-          name="persona a cargo"
+          name="personaAcargo"
           type="text"
           placeholder="Ingrese nombre de encargado"
-          onChange={(e)=>{handleProyecto(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={proyecto.personaAcargo}
+          onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
+      </>
       <button
-        onClick={()=>{handleRegistrarProyecto()}}>Registrar</button> 
+        onClick={(handleRegistrarProyecto)}>{ProyectoIndex !== null ? "Actualizar Proyecto" : "Registrar Proyecto"}</button> 
     </form>
   </section>
   <section>
@@ -203,6 +247,26 @@ return (
         <li key={i}>
           {e.nombreEven} - {e.fecha} - {e.direccion}
           <button onClick={() => actualizarEvento(i)}>Actualizar</button>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Beneficiarios registrados</h2>
+    <ul>
+      {beneficiarios.map((e, i) => (
+        <li key={i}>
+          {e.nombre} - {e.apellido} - {e.telefono} - {e.rol}
+          <button onClick={() => actualizarBeneficiario(i)}>Actualizar</button>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Proyectos registrados</h2>
+    <ul>
+      {proyectos.map((e, i) => (
+        <li key={i}>
+          {e.nombreProye} - {e.objetivo} - {e.personaAcargo}
+          <button onClick={() => actualizarProyecto(i)}>Actualizar</button>
         </li>
       ))}
     </ul>
