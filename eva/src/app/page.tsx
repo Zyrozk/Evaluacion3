@@ -69,13 +69,14 @@ useEffect(() =>{
 },[])
 
 const handleRegistrarEvento = ()=>{
-  miStorage.setItem("eventos",JSON.stringify([...eventos, evento]))
+  miStorage.setItem("beneficiarios",JSON.stringify([...beneficiarios,beneficiario]))
   }
   const handleEvento = (name:string, value:string)=>{
-    setEvento(
-      {...evento, [name] : value }
+    setBeneficiario(
+      {...beneficiario, [name] : value}
     )
   }
+
   
 const handleRegistrarBeneficiario = ()=>{
   miStorage.setItem("beneficiarios",JSON.stringify([...beneficiarios,beneficiario]))
@@ -101,9 +102,6 @@ const actualizarEvento = (index: number) =>{
   setEventoIndex(index)
 }
 
-const traerEvento = (e:Evento) =>{
-  setEvento(e)
-}
 
 return (
   <>
@@ -126,7 +124,7 @@ return (
           type="text"
           placeholder="Ingrese direccion"
           onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-      <button
+        <button
         onClick={()=>{handleRegistrarEvento()}}>Registrar</button>
     </form>
     <form>
