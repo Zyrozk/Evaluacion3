@@ -68,7 +68,7 @@ useEffect(() =>{
   }
 },[])
 
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, stateSetter: Function, state: any) => {
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, stateSetter: Function, state: any) => {
  const {name, value} = e.target
  stateSetter({...state, [name]: name === "telefono" ? Number(value) : value}) 
 }
@@ -171,96 +171,82 @@ return (
     <form>
       <h1>Bienvenido</h1>
      <RegistroEvento></RegistroEvento>
-     <>
       <input
           name="nombreEven"
           type="text"
           placeholder="Ingrese el nombre del evento"
           value={evento.nombreEven}
           onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
-      </>
-      <>
       <input
           name="fecha"
-          type="text"
+          type="date"
           placeholder="Ingrese la fecha"
           value={evento.fecha}
           onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
-      </>
-      <>
       <input
           name="direccion"
           type="text"
           placeholder="Ingrese direccion"
           value={evento.direccion}
           onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
-      </>
         <button
         onClick={(handleRegistrarEvento)}>{EventoIndex !== null ? "Actualizar Evento" : "Registrar Evento"}</button>
     </form>
     <form>
       <RegistroBeneficiario></RegistroBeneficiario>
-      <>
       <input
           name="nombre"
           type="text"
           placeholder="Ingrese su nombre"
           value={beneficiario.nombre}
           onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
-      </>
-      <>
       <input
           name="apellido"
          type="text"
           placeholder="Ingrese su apellido"
           value={beneficiario.apellido}
           onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
-      </>
-      <>
      <input
          name="telefono"
           type="text"
           placeholder="Ingrese su teléfono"
           value={beneficiario.telefono}
           onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
-      </>
-      <>
-      <input
+      <select
           name="rol"
-          type="text"
-          placeholder="Ingrese su rol"
           value={beneficiario.rol}
-          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
-      </>
+          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}>
+          <option value="">Seleccione un rol</option>
+          <option value="Estudiante">Estudiante</option>
+          <option value="Profesor">Profesor</option>
+          <option value="Ayudante">Ayudante</option>
+          <option value="Coordinador">Coordinador</option>
+      </select>
       <button
         onClick={(handleRegistrarBeneficiario)}>{BeneficiarioIndex !== null ? "Actualizar Beneficiario" : "Registrar Beneficiario"}</button> 
     </form>
     <form>
       <RegistroProyecto></RegistroProyecto>
-      <>
       <input
           name="nombreProye"
           type="text"
           placeholder="Ingrese el nombre del proyecto"
           value={proyecto.nombreProye}
           onChange={(e) => {handleInputChange(e, setProyecto, proyecto)}}/><br/>
-      </>
-      <>
-      <input
+      <textarea
+          id="objetivo"
           name="objetivo"
-          type="text"
           placeholder="Ingrese objetivo"
+          rows={4}
+          cols={40}
           value={proyecto.objetivo}
           onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
-      </>
-      <>
       <input
           name="personaAcargo"
           type="text"
           placeholder="Ingrese nombre de encargado"
           value={proyecto.personaAcargo}
           onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
-      </>
       <button
         onClick={(handleRegistrarProyecto)}>{ProyectoIndex !== null ? "Actualizar Proyecto" : "Registrar Proyecto"}</button> 
     </form>
