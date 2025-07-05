@@ -103,6 +103,7 @@ const actualizarEvento = (index: number) =>{
 }
 
 
+
 return (
   <>
   <section>
