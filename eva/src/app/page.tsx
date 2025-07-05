@@ -68,14 +68,27 @@ useEffect(() =>{
   }
 },[])
 
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, stateSetter: Function, state: any) => {
+ const {name, value} = e.target
+ stateSetter({...state, [name]: name === "telefono" ? Number(value) : value}) 
+}
+
 const handleRegistrarEvento = ()=>{
-  miStorage.setItem("beneficiarios",JSON.stringify([...beneficiarios,beneficiario]))
+  if (EventoIndex !== null) {
+    if (confirm("agrega texto despues")) {
+      const actualizaR = [...eventos]
+      actualizaR[EventoIndex] = evento
+      setEventos(actualizaR)
+      miStorage.setItem("eventos",JSON.stringify(actualizaR))
+      setEventoIndex(null)
+      setEvento(initialStateEvento)
   }
-  const handleEvento = (name:string, value:string)=>{
-    setBeneficiario(
-      {...beneficiario, [name] : value}
-    )
-  }
+} else {
+  const listaE = [...eventos, evento]
+  setEventos(listaE)
+  miStorage.setItem("eventos", JSON.stringify(listaE))
+ } 
+}
 
   
 const handleRegistrarBeneficiario = ()=>{
@@ -110,23 +123,32 @@ return (
     <form>
       <h1>Bienvenido</h1>
      <RegistroEvento></RegistroEvento>
+     <>
       <input
           name="nombreEven"
           type="text"
           placeholder="Ingrese el nombre del evento"
-          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={evento.nombreEven}
+          onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
+      </>
+      <>
       <input
           name="fecha"
           type="text"
           placeholder="Ingrese la fecha"
-          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={evento.fecha}
+          onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
+      </>
+      <>
       <input
           name="direccion"
           type="text"
           placeholder="Ingrese direccion"
-          onChange={(e)=>{handleEvento(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+          value={evento.direccion}
+          onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
+      </>
         <button
-        onClick={()=>{handleRegistrarEvento()}}>Registrar</button>
+        onClick={(handleRegistrarEvento)}>{EventoIndex !== null ? "Actualizar Evento" : "Registrar Evento"}</button>
     </form>
     <form>
       <RegistroBeneficiario></RegistroBeneficiario>
@@ -174,7 +196,17 @@ return (
         onClick={()=>{handleRegistrarProyecto()}}>Registrar</button> 
     </form>
   </section>
+  <section>
+    <h2>Eventos registrados</h2>
+    <ul>
+      {eventos.map((e, i) => (
+        <li key={i}>
+          {e.nombreEven} - {e.fecha} - {e.direccion}
+          <button onClick={() => actualizarEvento(i)}>Actualizar</button>
+        </li>
+      ))}
+    </ul>
+  </section>
   </> 
 )
 }
-
