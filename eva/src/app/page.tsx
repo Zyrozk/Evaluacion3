@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
-import RegistroEvento from "./componentes/RegistroEvento"
-import RegistroBeneficiario from "./componentes/RegistroBeneficiario"
+import { RegistroEvento } from "./componentes/RegistroEvento"
+import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
-import { spawn } from "child_process"
+
 
 const initialStateEvento:Evento = {
   nombreEven : "",
