@@ -23,7 +23,6 @@ export const RegistroBeneficiario = () => {
                     <th>Apellido</th>
                     <th>Teléfono</th>
                     <th>Rol</th>
-                    <th>Acción</th>
                 </tr>
             </thead>
         </table>

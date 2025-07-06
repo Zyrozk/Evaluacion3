@@ -102,8 +102,8 @@ const handleErrorEvento = (e: React.ChangeEvent<HTMLInputElement>) => {
         setErrorDireccionEvento("La dirección debe tener al menos 3 letras")
         return
       }
-      if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
-        setErrorDireccionEvento("solo se permiten letras")
+      if (!/^[A-Za-zÁÉÍÓÚáéíóú0-9\s]+$/.test(value)) {
+        setErrorDireccionEvento("solo se permiten letras y números")
         return
       }
     }

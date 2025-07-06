@@ -25,7 +25,6 @@ export const RegistroEvento = () => {
                     <th>Nombre del evento</th>
                     <th>Fecha</th>
                     <th>Dirección</th>
-                    <th>Acción</th>
                 </tr>
             </thead>
         </table>

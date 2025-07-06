@@ -22,7 +22,6 @@ export const RegistroProyecto = () => {
                     <th>Nombre del proyecto</th>
                     <th>Objetivo</th>
                     <th>Persona a cargo</th>
-                    <th>Acción</th>
                 </tr>
             </thead>
         </table>
