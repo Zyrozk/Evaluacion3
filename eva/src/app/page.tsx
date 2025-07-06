@@ -1,11 +1,12 @@
 'use client'
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
 import RegistroEvento from "./componentes/RegistroEvento"
 import RegistroBeneficiario from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
+import { spawn } from "child_process"
 
 const initialStateEvento:Evento = {
   nombreEven : "",
@@ -32,6 +33,8 @@ const miStorage = window.localStorage
 const [evento, setEvento] = useState(initialStateEvento)
 const [eventos, setEventos] = useState<Evento[]>([])
 const [EventoIndex, setEventoIndex] = useState<number | null>(null)
+const [ErrorNombreEvento, setErrorNombreEvento] = useState("")
+const [ErrorDireccionEvento, setErrorDireccionEvento] = useState("")
 
 
 const [beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
@@ -68,25 +71,67 @@ useEffect(() =>{
   }
 },[])
 
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, stateSetter: Function, state: any) => {
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, stateSetter: Function, state: any, errorSetter?: Function) => {
  const {name, value} = e.target
- stateSetter({...state, [name]: name === "telefono" ? Number(value) : value}) 
+ stateSetter({...state, [name]: name === "telefono" ? Number(value): value})
+}
+
+const handleErrorEvento = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const {name, value} = e.target
+  setEvento({...evento, [name]: value})
+  if (name === "nombreEven") {
+    if(value.length < 3) {
+      setErrorNombreEvento("El nombre del evento debe tener al menos 3 letras")
+      return
+    }
+    if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+      setErrorNombreEvento("solo se permiten letras")
+      return
+    }
+  
+    setErrorNombreEvento("")
+  }
+
+    if (name === "direccion") {
+      if(value.length < 3) {
+        setErrorDireccionEvento("La dirección debe tener al menos 3 letras")
+        return
+      }
+      if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+        setErrorDireccionEvento("solo se permiten letras")
+        return
+      }
+    }
+    setErrorDireccionEvento("")
 }
 
 const handleRegistrarEvento = ()=>{
-  if (EventoIndex !== null) {
-    if (confirm("agrega texto despues")) {
+  if(
+    evento.nombreEven.trim() === "" || evento.fecha.trim() === "" || evento.direccion.trim() === ""
+  ) {
+    alert("Debes rellenar todos los campos")
+    return
+  }
+  if(ErrorNombreEvento !== "" || ErrorDireccionEvento !== ""){
+    alert("Corrige los errores antes de registrar")
+    return
+  }
+  const confirmar = window.confirm(EventoIndex !== null ? "¿Estás seguro de actualizar este evento?" : "¿Estás seguro de registrar este evento?")
+  if(!confirmar){
+    return
+  }
+    if (EventoIndex !== null) {
       const actualizarE = [...eventos]
       actualizarE[EventoIndex] = evento
       setEventos(actualizarE)
       miStorage.setItem("eventos",JSON.stringify(actualizarE))
       setEventoIndex(null)
       setEvento(initialStateEvento)
-  }
 } else {
   const listaE = [...eventos, evento]
   setEventos(listaE)
   miStorage.setItem("eventos", JSON.stringify(listaE))
+  setEvento(initialStateEvento)
  } 
 }
 
@@ -176,7 +221,8 @@ return (
           type="text"
           placeholder="Ingrese el nombre del evento"
           value={evento.nombreEven}
-          onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
+          onChange={handleErrorEvento}/><br/>
+          {ErrorNombreEvento && (<span>{ErrorNombreEvento}</span>)}
       <input
           name="fecha"
           type="date"
@@ -188,8 +234,9 @@ return (
           type="text"
           placeholder="Ingrese direccion"
           value={evento.direccion}
-          onChange={(e)=>{handleInputChange(e, setEvento, evento)}}/><br/>
-        <button
+          onChange={handleErrorEvento}/><br/>
+          {ErrorDireccionEvento && (<span>{ErrorDireccionEvento}</span>)}<br/>
+        <button type="button"
         onClick={(handleRegistrarEvento)}>{EventoIndex !== null ? "Actualizar Evento" : "Registrar Evento"}</button>
     </form>
     <form>
