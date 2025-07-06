@@ -40,12 +40,17 @@ const [ErrorDireccionEvento, setErrorDireccionEvento] = useState("")
 const [beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
 const [beneficiarios, setBeneficiarios] = useState<Beneficiario[]>([])
 const [BeneficiarioIndex, setBeneficiarioIndex] = useState<number | null>(null)
+const [ErrorNombreBeneficiario, setErrorNombreBeneficiario] = useState("")
+const [ErrorApellidoBeneficiario, setErrorApellidoBeneficiario] = useState("")
+const [ErrorTelefonoBeneficiario, setErrorTelefonoBeneficiario] = useState("")
 
 
 const [proyecto, setProyecto] = useState(initialStateProyecto)
 const [proyectos, setProyectos] = useState<Proyecto[]>([])
 const [ProyectoIndex, setProyectoIndex] = useState<number | null>(null)
-
+const [ErrorNombreProyecto, setErrorNombreProyecto] = useState("")
+const [ErrorObjetivoProyecto, setErrorObjetivoProyecto] = useState("")
+const [ErrorCargoProyecto, setErrorCargoProyecto] = useState("")
 
 useEffect(() =>{
   let lisEvento = miStorage.getItem("eventos")
@@ -135,27 +140,128 @@ const handleRegistrarEvento = ()=>{
  } 
 }
 
+const handleErrorBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const {name, value} = e.target
+  setBeneficiario({...beneficiario, [name]: value})
+  if (name === "nombre") {
+    if(value.length < 3) {
+      setErrorNombreBeneficiario("El nombre debe tener al menos 3 letras")
+      return
+    }
+    if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+      setErrorNombreBeneficiario("solo se permiten letras")
+      return
+    }
+  
+    setErrorNombreBeneficiario("")
+  }
+
+    if (name === "apellido") {
+      if(value.length < 3) {
+        setErrorApellidoBeneficiario("El apellidoo debe tener al menos 3 letras")
+        return
+      }
+      if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+        setErrorApellidoBeneficiario("solo se permiten letras")
+        return
+      }
+    }
+    setErrorApellidoBeneficiario("")
+}
+
+const handleErrorTelefonoBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value
+  if (value.length !== 9 ) {
+    setErrorTelefonoBeneficiario("El teléfono debe tener 9 dígitos")
+  } else {
+    setErrorTelefonoBeneficiario("")
+  }
+  setBeneficiario({...beneficiario, telefono: Number(value)})
+}
   
 const handleRegistrarBeneficiario = ()=>{
-  if (BeneficiarioIndex !== null) {
-    if (confirm("asd")) {
+  if(
+    beneficiario.nombre.trim() === "" || beneficiario.apellido.trim() === "" || beneficiario.telefono.toString().trim() === "" || beneficiario.rol.trim() === ""
+  ) {
+    alert("Debes rellenar todos los campos")
+    return
+  }
+  if(ErrorNombreBeneficiario !== "" || ErrorApellidoBeneficiario !== "" || ErrorTelefonoBeneficiario !== ""){
+    alert("Corrige los errores antes de registrar")
+    return
+  }
+  const confirmar = window.confirm(BeneficiarioIndex !== null ? "¿Estás seguro de actualizar este beneficiario?" : "¿Estás seguro de registrar este benefeciario?")
+  if(!confirmar){
+    return
+  }
+  if (BeneficiarioIndex !== null) { 
       const actualizarB = [...beneficiarios]
       actualizarB[BeneficiarioIndex] = beneficiario
       setBeneficiarios(actualizarB)
       miStorage.setItem("beneficiarios",JSON.stringify(actualizarB))
       setBeneficiarioIndex(null)
       setBeneficiario(initialStateBeneficiario)
-  }
 } else {
   const listaB = [...beneficiarios, beneficiario]
   setBeneficiarios(listaB)
   miStorage.setItem("beneficiarios", JSON.stringify(listaB))
+  setBeneficiario(initialStateBeneficiario)
+ }
+}
+
+const handleErrorProyecto = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const {name, value} = e.target
+  setProyecto({...proyecto, [name]: value})
+  if (name === "nombreProye") {
+    if(value.length < 3) {
+      setErrorNombreProyecto("El nombre del proyecto debe tener al menos 3 letras")
+      return
+    }
+    if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+      setErrorNombreProyecto("solo se permiten letras")
+      return
+    }
+  
+    setErrorNombreProyecto("")
+  }
+
+    if (name === "objetivo") {
+      if(value.trim().length < 3) {
+        setErrorObjetivoProyecto("El objetivo debe tener al menos 3 caracteres")
+        return
+      }
+    setErrorObjetivoProyecto("")
+  }
+    if (name === "personaAcargo") {
+      if(value.length < 3) {
+        setErrorCargoProyecto("Persona a cargo debe tener al menos 3 letras")
+        return
+    }
+    if (!/^[A-Za-zÁÉÍÓÚáéíóú\s]+$/.test(value)) {
+      setErrorCargoProyecto("solo se permiten letras")
+      return
+      }
+    setErrorCargoProyecto("")
  }
 }
 
 const handleRegistrarProyecto = ()=>{
+  if(
+    proyecto.nombreProye.trim() === "" || proyecto.objetivo.trim() === "" || proyecto.personaAcargo.trim() === "" 
+  ) {
+    alert("Debes rellenar todos los campos")
+    return
+  }
+  if(ErrorNombreProyecto !== "" || ErrorObjetivoProyecto !== ""){
+    alert("Corrige los errores antes de registrar")
+    return
+  }
+  const confirmar = window.confirm(BeneficiarioIndex !== null ? "¿Estás seguro de actualizar este proyecto?" : "¿Estás seguro de registrar este proyecto?")
+  if(!confirmar){
+    return
+  }
   if (ProyectoIndex !== null) {
-    if (confirm("asad")) {
+   {
       const actualizarP = [...proyectos]
       actualizarP[ProyectoIndex] = proyecto
       setProyectos(actualizarP)
@@ -246,19 +352,22 @@ return (
           type="text"
           placeholder="Ingrese su nombre"
           value={beneficiario.nombre}
-          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+          onChange={handleErrorBeneficiario}/><br/>
+          {ErrorNombreBeneficiario && (<span>{ErrorNombreBeneficiario}</span>)}
       <input
           name="apellido"
          type="text"
           placeholder="Ingrese su apellido"
           value={beneficiario.apellido}
-          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+          onChange={handleErrorBeneficiario}/><br/>
+          {ErrorApellidoBeneficiario && (<span>{ErrorApellidoBeneficiario}</span>)}
      <input
          name="telefono"
           type="text"
           placeholder="Ingrese su teléfono"
           value={beneficiario.telefono}
-          onChange={(e)=>{handleInputChange(e, setBeneficiario, beneficiario)}}/><br/>
+          onChange={handleErrorTelefonoBeneficiario}/><br/>
+          {ErrorTelefonoBeneficiario && <span>{ErrorTelefonoBeneficiario}</span>}
       <select
           name="rol"
           value={beneficiario.rol}
@@ -279,7 +388,8 @@ return (
           type="text"
           placeholder="Ingrese el nombre del proyecto"
           value={proyecto.nombreProye}
-          onChange={(e) => {handleInputChange(e, setProyecto, proyecto)}}/><br/>
+          onChange={handleErrorProyecto}/><br/>
+          {ErrorNombreProyecto && <span>{ErrorNombreProyecto}</span>}
       <textarea
           id="objetivo"
           name="objetivo"
@@ -287,13 +397,15 @@ return (
           rows={4}
           cols={40}
           value={proyecto.objetivo}
-          onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
+          onChange={handleErrorProyecto}/><br/>
+          {ErrorObjetivoProyecto && <span>{ErrorObjetivoProyecto}</span>}
       <input
           name="personaAcargo"
           type="text"
           placeholder="Ingrese nombre de encargado"
           value={proyecto.personaAcargo}
-          onChange={(e)=>{handleInputChange(e, setProyecto, proyecto)}}/><br/>
+          onChange={handleErrorProyecto}/><br/>
+          {ErrorCargoProyecto && <span>{ErrorCargoProyecto}</span>}
       <button
         onClick={(handleRegistrarProyecto)}>{ProyectoIndex !== null ? "Actualizar Proyecto" : "Registrar Proyecto"}</button> 
     </form>
