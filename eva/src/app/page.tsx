@@ -261,7 +261,7 @@ const handleRegistrarProyecto = ()=>{
     return
   }
   if (ProyectoIndex !== null) {
-   {
+   {  
       const actualizarP = [...proyectos]
       actualizarP[ProyectoIndex] = proyecto
       setProyectos(actualizarP)
@@ -292,7 +292,7 @@ const actualizarProyecto = (index: number) =>{
 }
 
 const eliminarEvento = (index: number) => {
-  if (confirm("aadsad")) {
+  if (confirm("¿Está seguro de eliminar este evento?")) {
     const listaE = eventos.filter((_, i) => i !== index)
     setEventos(listaE)
     miStorage.setItem("eventos", JSON.stringify(listaE))
@@ -300,7 +300,7 @@ const eliminarEvento = (index: number) => {
 }
 
 const eliminarBeneficiario = (index: number) => {
-  if (confirm("asd")) {
+  if (confirm("¿Está seguro de eliminar este beneficiario?")) {
     const listaB = beneficiarios.filter((_, i) => i !== index)
     setBeneficiarios(listaB)
     miStorage.setItem("beneficiarios", JSON.stringify(listaB))
@@ -308,7 +308,7 @@ const eliminarBeneficiario = (index: number) => {
 }
 
 const eliminarProyecto = (index: number) => {
-  if (confirm("adds")) {
+  if (confirm("¿Está seguro de eliminar este proyecto?")) {
     const listaP = proyectos.filter((_, i) => i !== index)
     setProyectos(listaP)
     miStorage.setItem("proyectos", JSON.stringify(listaP))
