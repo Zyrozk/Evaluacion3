@@ -1,6 +1,6 @@
 import { db } from "./Conexion";
 import { Evento } from "../interfaces/iEvento";
-import { addDoc, collection, getDocs } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "@firebase/firestore";
 
 
 export const RegistroEvento = async (evento: Evento) => {
@@ -21,4 +21,12 @@ export const obtenerEventos = async (): Promise<(Evento & {id: string})[]> => {
         console.log(docSnap.id, "=>", evento)
     })
     return listado
+}
+
+export const eliminarEvento = (id: string) =>
+    deleteDoc(doc(db, "eventos", id))
+
+export const actualizarEvento = (id: string, data: Evento) => {
+    const {nombreEven, fecha, direccion} = data
+    return updateDoc(doc(db, "eventos", id), {nombreEven, fecha, direccion})
 }

@@ -5,7 +5,9 @@ import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
 import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
-import { RegistroEvento, obtenerEventos } from "./Firebase/Promesas"
+import { RegistroEvento, obtenerEventos, actualizarEvento, eliminarEvento
+
+} from "./Firebase/Promesas"
 
 
 export default function Home(){
@@ -120,15 +122,15 @@ const handleRegistrarEvento = async ()=>{
   if(!confirmar){
     return
   }
-    if (EventoIndex !== null) {
-      await actualizarEvento(eventos[EventoIndex].id, evento)
-      setEventoIndex(null)
-    } else {
-      await RegistroEvento(evento)
-    }
+  if (EventoIndex !== null) {
+    await actualizarEvento(eventos[EventoIndex].id, evento)
+    setEventoIndex(null)
+  } else {
+    await RegistroEvento(evento)
+  }
 
-    setEvento(initialStateEvento)
-    obtenerEventos().then(setEventos)
+  setEvento(initialStateEvento)
+  obtenerEventos().then(setEventos)
 }
 
 const handleErrorBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +270,11 @@ const handleRegistrarProyecto = ()=>{
 }  
 
 const actualizarEvento = (index: number) =>{
-  setEvento(eventos[index])
+  setEvento({
+    nombreEven: evento[index].nombreEven,
+    fecha: evento[index].fecha,
+    direccion: evento[index].direccion
+  })
   setEventoIndex(index)
 }
 
@@ -282,11 +288,10 @@ const actualizarProyecto = (index: number) =>{
   setProyectoIndex(index)
 }
 
-const eliminarEvento = (index: number) => {
+const eliminarEvento = async (index: number) => {
   if (confirm("¿Está seguro de eliminar este evento?")) {
-    const listaE = eventos.filter((_, i) => i !== index)
-    setEventos(listaE)
-    miStorage.setItem("eventos", JSON.stringify(listaE))
+    await eliminarEvento(evento[index].id)
+    obtenerEventos().then(setEventos)
   }
 }
 
