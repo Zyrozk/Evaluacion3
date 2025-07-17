@@ -5,8 +5,8 @@ import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
 import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
-import { RegistroEvento, obtenerEventos, actualizarEvento, eliminarEvento 
-
+import { RegistrarEvento, obtenerEventos, actualizarEvento, eliminarEvento 
+RegistrarBeneficiario, obtenerBeneficiarios
 } from "./Firebase/Promesas"
 
 export default function Home(){
@@ -38,7 +38,7 @@ const [ErrorDireccionEvento, setErrorDireccionEvento] = useState("")
 
 
 const [beneficiario, setBeneficiario] = useState(initialStateBeneficiario)
-const [beneficiarios, setBeneficiarios] = useState<Beneficiario[]>([])
+const [beneficiarios, setBeneficiarios] = useState<any[]>([])
 const [BeneficiarioIndex, setBeneficiarioIndex] = useState<number | null>(null)
 const [ErrorNombreBeneficiario, setErrorNombreBeneficiario] = useState("")
 const [ErrorApellidoBeneficiario, setErrorApellidoBeneficiario] = useState("")
@@ -125,7 +125,7 @@ const handleRegistrarEvento = async ()=>{
     await actualizarEvento(eventos[EventoIndex].id, evento)
     setEventoIndex(null)
   } else {
-    await RegistroEvento(evento)
+    await RegistrarEvento(evento)
   }
 
   setEvento(initialStateEvento)
