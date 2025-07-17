@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
-import { RegistroProyecto } from "./componentes/RegistroProyecto"
 import { RegistrarEvento, obtenerEventos, actualizarEvento, eliminarEvento, 
-RegistrarBeneficiario, obtenerBeneficiarios, actualizarBeneficiario, eliminarBeneficiario
+RegistrarBeneficiario, obtenerBeneficiarios, actualizarBeneficiario, eliminarBeneficiario,
+RegistrarProyecto, obtenerProyectos, actualizarProyecto, eliminarProyecto
 } from "./Firebase/Promesas"
 
 export default function Home(){
@@ -45,7 +45,7 @@ const [ErrorTelefonoBeneficiario, setErrorTelefonoBeneficiario] = useState("")
 
 
 const [proyecto, setProyecto] = useState(initialStateProyecto)
-const [proyectos, setProyectos] = useState<Proyecto[]>([])
+const [proyectos, setProyectos] = useState<any[]>([])
 const [ProyectoIndex, setProyectoIndex] = useState<number | null>(null)
 const [ErrorNombreProyecto, setErrorNombreProyecto] = useState("")
 const [ErrorObjetivoProyecto, setErrorObjetivoProyecto] = useState("")
@@ -60,11 +60,7 @@ useEffect(() =>{
 },[])
 
 useEffect(() =>{
-  let lisProyecto = localStorage.getItem("proyectos")
-  if(lisProyecto != null){
-    let listadoP = JSON.parse(lisProyecto)
-    setProyectos(listadoP)
-  }
+  obtenerProyectos().then(setProyectos)
 },[])
 
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, stateSetter: Function, state: any, errorSetter?: Function) => {
@@ -227,7 +223,7 @@ const handleErrorProyecto = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAre
  }
 }
 
-const handleRegistrarProyecto = ()=>{
+const handleRegistrarProyecto = async ()=>{
   if(
     proyecto.nombreProye.trim() === "" || proyecto.objetivo.trim() === "" || proyecto.personaAcargo.trim() === "" 
   ) {
@@ -243,19 +239,13 @@ const handleRegistrarProyecto = ()=>{
     return
   }
   if (ProyectoIndex !== null) {
-   {  
-      const actualizarP = [...proyectos]
-      actualizarP[ProyectoIndex] = proyecto
-      setProyectos(actualizarP)
-      miStorage.setItem("proyectos",JSON.stringify(actualizarP))
-      setProyectoIndex(null)
-      setProyecto(initialStateProyecto)
+    await actualizarProyecto(proyectos[ProyectoIndex].id, proyecto)
+    setProyectoIndex(null)
+  } else {
+    await RegistrarProyecto(proyecto)
   }
-} else {
-  const listaP = [...proyectos, proyecto]
-  setProyectos(listaP)
-  miStorage.setItem("proyectos", JSON.stringify(listaP))
-  }
+  setProyecto(initialStateProyecto)
+  obtenerProyectos().then(setProyectos)
 }  
 
 const actualizarEventoIndex = (index: number) =>{
@@ -277,8 +267,12 @@ const actualizarBeneficiarioIndex = (index: number) =>{
   setBeneficiarioIndex(index)
 }
 
-const actualizarProyecto = (index: number) =>{
-  setProyecto(proyectos[index])
+const actualizarProyectoIndex = (index: number) =>{
+  setProyecto({
+    nombreProye: proyectos[index].nombreProye,
+    objetivo: proyectos[index].objetivo,
+    personaAcargo: proyectos[index].personaAcargo
+  })
   setProyectoIndex(index)
 }
 
@@ -296,11 +290,10 @@ const eliminarBeneficiarioIndex = async (index: number) => {
   }
 }
 
-const eliminarProyecto = (index: number) => {
+const eliminarProyectoIndex = async (index: number) => {
   if (confirm("¿Está seguro de eliminar este proyecto?")) {
-    const listaP = proyectos.filter((_, i) => i !== index)
-    setProyectos(listaP)
-    miStorage.setItem("proyectos", JSON.stringify(listaP))
+    await eliminarProyecto(proyectos[index].id)
+    obtenerProyectos().then(setProyectos)
   }
 }
 
@@ -387,7 +380,6 @@ return (
         </ul>
     </form>
     <form>
-      <RegistroProyecto></RegistroProyecto>
       <input
           name="nombreProye"
           type="text"
@@ -411,32 +403,18 @@ return (
           value={proyecto.personaAcargo}
           onChange={handleErrorProyecto}/><br/>
           {ErrorCargoProyecto && <span>{ErrorCargoProyecto}</span>}
-      <button
+      <button type="button"
         onClick={(handleRegistrarProyecto)}>{ProyectoIndex !== null ? "Actualizar Proyecto" : "Registrar Proyecto"}</button> 
+        <ul>
+          {proyectos.map((p,i) =>
+            <li key={p.id}>
+              {p.nombreProye} - {p.objetivo} - {p.personaAcargo}
+              <button onClick={() => actualizarProyectoIndex(i)}>Actualizar</button>
+              <button onClick={() => eliminarProyectoIndex(i)}>Eliminar</button>
+            </li>
+          )}
+        </ul>
     </form>
-  </section>
-  <section>
-    <h2>Beneficiarios registrados</h2>
-    <ul>
-      {beneficiarios.map((e, i) => (
-        <li key={i}>
-          {e.nombre} - {e.apellido} - {e.telefono} - {e.rol}
-          <button onClick={() => actualizarBeneficiarioIndex(i)}>Actualizar</button>
-          <button onClick={() => eliminarBeneficiarioIndex(i)}>Eliminar</button>
-        </li>
-      ))}
-    </ul>
-
-    <h2>Proyectos registrados</h2>
-    <ul>
-      {proyectos.map((e, i) => (
-        <li key={i}>
-          {e.nombreProye} - {e.objetivo} - {e.personaAcargo}
-          <button onClick={() => actualizarProyecto(i)}>Actualizar</button>
-          <button onClick={() => eliminarProyecto(i)}>Eliminar</button>
-        </li>
-      ))}
-    </ul>
   </section>
   </> 
 )

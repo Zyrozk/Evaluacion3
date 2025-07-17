@@ -1,8 +1,8 @@
 import { db } from "./Conexion";
 import { Evento } from "../interfaces/iEvento";
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { Beneficiario } from "../interfaces/iBeneficiario";
 import { Proyecto } from "../interfaces/iProyecto";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 
 
 export const RegistrarEvento = async (evento: Evento) => {
@@ -71,7 +71,7 @@ export const RegistrarProyecto = async (proyecto: Proyecto) => {
     console.log("Proyecto guardado con el ID:", docRef.id)
 }
 
-export const obtenerProyectos = async (): Promise<Beneficiario(Proyecto & { id: string})[]> => {
+export const obtenerProyectos = async (): Promise<(Proyecto & { id: string})[]> => {
     const querySnapshot = await getDocs(collection(db, "proyectos"))
     let listado: (Proyecto & {id: string })[] = []
     querySnapshot.forEach((docSnap) => {
