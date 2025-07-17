@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
-import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
-import { RegistrarEvento, obtenerEventos, actualizarEvento, eliminarEvento 
-RegistrarBeneficiario, obtenerBeneficiarios
+import { RegistrarEvento, obtenerEventos, actualizarEvento, eliminarEvento, 
+RegistrarBeneficiario, obtenerBeneficiarios, actualizarBeneficiario, eliminarBeneficiario
 } from "./Firebase/Promesas"
 
 export default function Home(){
@@ -57,11 +56,7 @@ useEffect(() =>{
 },[])
 
 useEffect(() =>{
-  let lisBeneficiario = localStorage.getItem("beneficiarios")
-  if(lisBeneficiario != null){
-    let listadoB =  JSON.parse(lisBeneficiario)
-    setBeneficiarios(listadoB)
-  }
+  obtenerBeneficiarios().then(setBeneficiarios)
 },[])
 
 useEffect(() =>{
@@ -171,7 +166,7 @@ const handleErrorTelefonoBeneficiario = (e: React.ChangeEvent<HTMLInputElement>)
   setBeneficiario({...beneficiario, telefono: Number(value)})
 }
   
-const handleRegistrarBeneficiario = ()=>{
+const handleRegistrarBeneficiario = async ()=>{
   if(
     beneficiario.nombre.trim() === "" || beneficiario.apellido.trim() === "" || beneficiario.telefono.toString().trim() === "" || beneficiario.rol.trim() === ""
   ) {
@@ -187,18 +182,13 @@ const handleRegistrarBeneficiario = ()=>{
     return
   }
   if (BeneficiarioIndex !== null) { 
-      const actualizarB = [...beneficiarios]
-      actualizarB[BeneficiarioIndex] = beneficiario
-      setBeneficiarios(actualizarB)
-      miStorage.setItem("beneficiarios",JSON.stringify(actualizarB))
+      await actualizarBeneficiario(beneficiarios[BeneficiarioIndex].id, beneficiario)
       setBeneficiarioIndex(null)
-      setBeneficiario(initialStateBeneficiario)
-} else {
-  const listaB = [...beneficiarios, beneficiario]
-  setBeneficiarios(listaB)
-  miStorage.setItem("beneficiarios", JSON.stringify(listaB))
+  } else {
+    await RegistrarBeneficiario(beneficiario)
+  }
   setBeneficiario(initialStateBeneficiario)
- }
+  obtenerBeneficiarios().then(setBeneficiarios)   
 }
 
 const handleErrorProyecto = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -277,8 +267,13 @@ const actualizarEventoIndex = (index: number) =>{
   setEventoIndex(index)
 }
 
-const actualizarBeneficiario = (index: number) =>{
-  setBeneficiario(beneficiarios[index])
+const actualizarBeneficiarioIndex = (index: number) =>{
+  setBeneficiario({
+    nombre: beneficiarios[index].nombre,
+    apellido: beneficiarios[index].apellido,
+    telefono: beneficiarios[index].telefono,
+    rol: beneficiarios[index].rol
+  })
   setBeneficiarioIndex(index)
 }
 
@@ -294,11 +289,10 @@ const eliminarEventoIndex = async (index: number) => {
   }
 }
 
-const eliminarBeneficiario = (index: number) => {
+const eliminarBeneficiarioIndex = async (index: number) => {
   if (confirm("¿Está seguro de eliminar este beneficiario?")) {
-    const listaB = beneficiarios.filter((_, i) => i !== index)
-    setBeneficiarios(listaB)
-    miStorage.setItem("beneficiarios", JSON.stringify(listaB))
+    await eliminarBeneficiario(beneficiarios[index].id)
+    obtenerBeneficiarios().then(setBeneficiarios)
   }
 }
 
@@ -349,7 +343,6 @@ return (
         </ul>
     </form>
     <form>
-      <RegistroBeneficiario></RegistroBeneficiario>
       <input
           name="nombre"
           type="text"
@@ -381,8 +374,17 @@ return (
           <option value="Ayudante">Ayudante</option>
           <option value="Coordinador">Coordinador</option>
       </select>
-      <button
+      <button type="button"
         onClick={(handleRegistrarBeneficiario)}>{BeneficiarioIndex !== null ? "Actualizar Beneficiario" : "Registrar Beneficiario"}</button> 
+        <ul>
+          {beneficiarios.map((b,i) =>
+          <li key={b.id}>
+            {b.nombre} - {b.apellido} - {b.telefono} - {b.rol}
+            <button onClick={() => actualizarBeneficiarioIndex(i)}>Actualizar</button>
+            <button onClick={() => eliminarBeneficiarioIndex(i)}>Eliminar</button>
+          </li>
+          )}
+        </ul>
     </form>
     <form>
       <RegistroProyecto></RegistroProyecto>
@@ -419,8 +421,8 @@ return (
       {beneficiarios.map((e, i) => (
         <li key={i}>
           {e.nombre} - {e.apellido} - {e.telefono} - {e.rol}
-          <button onClick={() => actualizarBeneficiario(i)}>Actualizar</button>
-          <button onClick={() => eliminarBeneficiario(i)}>Eliminar</button>
+          <button onClick={() => actualizarBeneficiarioIndex(i)}>Actualizar</button>
+          <button onClick={() => eliminarBeneficiarioIndex(i)}>Eliminar</button>
         </li>
       ))}
     </ul>
