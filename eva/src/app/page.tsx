@@ -5,10 +5,9 @@ import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
 import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
-import { RegistroEvento, obtenerEventos, actualizarEvento, eliminarEvento
+import { RegistroEvento, obtenerEventos, actualizarEvento, eliminarEvento 
 
 } from "./Firebase/Promesas"
-
 
 export default function Home(){
 
@@ -32,7 +31,7 @@ const initialStateProyecto:Proyecto = {
 }
 
 const [evento, setEvento] = useState(initialStateEvento)
-const [eventos, setEventos] = useState<Evento[]>([])
+const [eventos, setEventos] = useState<any[]>([])
 const [EventoIndex, setEventoIndex] = useState<number | null>(null)
 const [ErrorNombreEvento, setErrorNombreEvento] = useState("")
 const [ErrorDireccionEvento, setErrorDireccionEvento] = useState("")
@@ -269,11 +268,11 @@ const handleRegistrarProyecto = ()=>{
   }
 }  
 
-const actualizarEvento = (index: number) =>{
+const actualizarEventoIndex = (index: number) =>{
   setEvento({
-    nombreEven: evento[index].nombreEven,
-    fecha: evento[index].fecha,
-    direccion: evento[index].direccion
+    nombreEven: eventos[index].nombreEven,
+    fecha: eventos[index].fecha,
+    direccion: eventos[index].direccion
   })
   setEventoIndex(index)
 }
@@ -288,9 +287,9 @@ const actualizarProyecto = (index: number) =>{
   setProyectoIndex(index)
 }
 
-const eliminarEvento = async (index: number) => {
+const eliminarEventoIndex = async (index: number) => {
   if (confirm("¿Está seguro de eliminar este evento?")) {
-    await eliminarEvento(evento[index].id)
+    await eliminarEvento(eventos[index].id)
     obtenerEventos().then(setEventos)
   }
 }
@@ -317,7 +316,6 @@ return (
   <section>
     <form>
       <h1>Bienvenido</h1>
-     <RegistroEvento></RegistroEvento>
       <input
           name="nombreEven"
           type="text"
@@ -340,6 +338,15 @@ return (
           {ErrorDireccionEvento && (<span>{ErrorDireccionEvento}</span>)}<br/>
         <button type="button"
         onClick={(handleRegistrarEvento)}>{EventoIndex !== null ? "Actualizar Evento" : "Registrar Evento"}</button>
+        <ul>
+          {eventos.map((e,i) =>
+          <li key={e.id}>
+            {e.nombreEven} - {e.fecha} - {e.direccion}
+            <button onClick={() => actualizarEventoIndex(i)}>Actualizar</button>
+            <button onClick={() => eliminarEventoIndex(i)}>Eliminar</button>
+            </li>
+            )}
+        </ul>
     </form>
     <form>
       <RegistroBeneficiario></RegistroBeneficiario>
@@ -407,17 +414,6 @@ return (
     </form>
   </section>
   <section>
-    <h2>Eventos registrados</h2>
-    <ul>
-      {eventos.map((e, i) => (
-        <li key={i}>
-          {e.nombreEven} - {e.fecha} - {e.direccion}
-          <button onClick={() => actualizarEvento(i)}>Actualizar</button>
-          <button onClick={() => eliminarEvento(i)}>Eliminar</button>
-        </li>
-      ))}
-    </ul>
-
     <h2>Beneficiarios registrados</h2>
     <ul>
       {beneficiarios.map((e, i) => (
