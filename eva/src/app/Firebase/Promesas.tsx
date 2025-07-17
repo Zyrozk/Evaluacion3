@@ -2,6 +2,7 @@ import { db } from "./Conexion";
 import { Evento } from "../interfaces/iEvento";
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { Beneficiario } from "../interfaces/iBeneficiario";
+import { Proyecto } from "../interfaces/iProyecto";
 
 
 export const RegistrarEvento = async (evento: Evento) => {
@@ -61,4 +62,34 @@ export const eliminarBeneficiario = (id: string) =>
 export const actualizarBeneficiario = (id: string, data: Beneficiario) => {
     const { nombre, apellido, telefono, rol} = data
     return updateDoc(doc(db, "beneficiarios", id), {nombre, apellido, telefono, rol })
+}
+
+
+
+export const RegistrarProyecto = async (proyecto: Proyecto) => {
+    const docRef = await addDoc(collection(db, "proyectos"), proyecto)
+    console.log("Proyecto guardado con el ID:", docRef.id)
+}
+
+export const obtenerProyectos = async (): Promise<Beneficiario(Proyecto & { id: string})[]> => {
+    const querySnapshot = await getDocs(collection(db, "proyectos"))
+    let listado: (Proyecto & {id: string })[] = []
+    querySnapshot.forEach((docSnap) => {
+        const proyecto: Proyecto = {
+            nombreProye: docSnap.data().nombreProye,
+            objetivo: docSnap.data().objetivo,
+            personaAcargo: docSnap.data().personaAcargo
+        }
+        listado.push({ id: docSnap.id, ...proyecto})
+        console.log(docSnap.id, " => ", proyecto)
+    })
+    return listado
+}
+
+export const eliminarProyecto = (id: string) =>
+    deleteDoc(doc(db, "proyectos", id))
+
+export const actualizarProyecto = (id: string, data: Proyecto) => {
+    const { nombreProye, objetivo, personaAcargo } = data
+    return updateDoc(doc(db, "proyectos", id), { nombreProye, objetivo, personaAcargo })
 }
