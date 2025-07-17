@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react"
 import { Evento } from "./interfaces/iEvento"
 import { Beneficiario } from "./interfaces/iBeneficiario"
 import { Proyecto } from "./interfaces/iProyecto"
-import { RegistroEvento } from "./componentes/RegistroEvento"
 import { RegistroBeneficiario } from "./componentes/RegistroBeneficiario"
 import { RegistroProyecto } from "./componentes/RegistroProyecto"
+import { RegistroEvento, obtenerEventos } from "./Firebase/Promesas"
 
+
+export default function Home(){
 
 const initialStateEvento:Evento = {
   nombreEven : "",
@@ -27,9 +29,6 @@ const initialStateProyecto:Proyecto = {
   personaAcargo : ""
 }
 
-export default function Home(){
-
-const miStorage = window.localStorage
 const [evento, setEvento] = useState(initialStateEvento)
 const [eventos, setEventos] = useState<Evento[]>([])
 const [EventoIndex, setEventoIndex] = useState<number | null>(null)
@@ -53,11 +52,7 @@ const [ErrorObjetivoProyecto, setErrorObjetivoProyecto] = useState("")
 const [ErrorCargoProyecto, setErrorCargoProyecto] = useState("")
 
 useEffect(() =>{
-  let lisEvento = miStorage.getItem("eventos")
-  if(lisEvento != null){
-    let listadoE = JSON.parse(lisEvento)
-    setEventos(listadoE)
-  }
+  obtenerEventos().then(setEventos)
 },[])
 
 useEffect(() =>{
@@ -110,7 +105,7 @@ const handleErrorEvento = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorDireccionEvento("")
 }
 
-const handleRegistrarEvento = ()=>{
+const handleRegistrarEvento = async ()=>{
   if(
     evento.nombreEven.trim() === "" || evento.fecha.trim() === "" || evento.direccion.trim() === ""
   ) {
@@ -126,18 +121,14 @@ const handleRegistrarEvento = ()=>{
     return
   }
     if (EventoIndex !== null) {
-      const actualizarE = [...eventos]
-      actualizarE[EventoIndex] = evento
-      setEventos(actualizarE)
-      miStorage.setItem("eventos",JSON.stringify(actualizarE))
+      await actualizarEvento(eventos[EventoIndex].id, evento)
       setEventoIndex(null)
-      setEvento(initialStateEvento)
-} else {
-  const listaE = [...eventos, evento]
-  setEventos(listaE)
-  miStorage.setItem("eventos", JSON.stringify(listaE))
-  setEvento(initialStateEvento)
- } 
+    } else {
+      await RegistroEvento(evento)
+    }
+
+    setEvento(initialStateEvento)
+    obtenerEventos().then(setEventos)
 }
 
 const handleErrorBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
