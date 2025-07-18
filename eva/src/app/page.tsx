@@ -329,8 +329,8 @@ return (
           {eventos.map((e,i) =>
           <li key={e.id}>
             {e.nombreEven} - {e.fecha} - {e.direccion}
-            <button onClick={() => actualizarEventoIndex(i)}>Actualizar</button>
-            <button onClick={() => eliminarEventoIndex(i)}>Eliminar</button>
+            <button type="button" onClick={() => actualizarEventoIndex(i)}>Actualizar</button>
+            <button type="button" onClick={() => eliminarEventoIndex(i)}>Eliminar</button>
             </li>
             )}
         </ul>
@@ -373,8 +373,8 @@ return (
           {beneficiarios.map((b,i) =>
           <li key={b.id}>
             {b.nombre} - {b.apellido} - {b.telefono} - {b.rol}
-            <button onClick={() => actualizarBeneficiarioIndex(i)}>Actualizar</button>
-            <button onClick={() => eliminarBeneficiarioIndex(i)}>Eliminar</button>
+            <button type="button" onClick={() => actualizarBeneficiarioIndex(i)}>Actualizar</button>
+            <button type="button" onClick={() => eliminarBeneficiarioIndex(i)}>Eliminar</button>
           </li>
           )}
         </ul>
@@ -409,8 +409,8 @@ return (
           {proyectos.map((p,i) =>
             <li key={p.id}>
               {p.nombreProye} - {p.objetivo} - {p.personaAcargo}
-              <button onClick={() => actualizarProyectoIndex(i)}>Actualizar</button>
-              <button onClick={() => eliminarProyectoIndex(i)}>Eliminar</button>
+              <button type="button" onClick={() => actualizarProyectoIndex(i)}>Actualizar</button>
+              <button type="button" onClick={() => eliminarProyectoIndex(i)}>Eliminar</button>
             </li>
           )}
         </ul>
